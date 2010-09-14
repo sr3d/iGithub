@@ -35,22 +35,44 @@ var viewContainer = Titanium.UI.createView({
 // viewContainer.add(table);    
 
 var views = [];
-var currentView = 0;
+var currentView = -1;
 function newView() { 
   var view = Titanium.UI.createView({
     top:0,
     width:320,
     height:420
   });
+  
+  views.push(view);
   viewContainer.add( view );
+
+  currentView++;
 
   return view;
 }
 
 function switchView(viewIndex) {  
-  viewContainer.animate({view: views[viewIndex], transition:Ti.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT} );
-  for( var i = 0; i < views.length; i++ ) {
-    views[i].visible = (i == viewIndex) ? true : false;
+  if( viewIndex < 0 ) {
+    // button.visible = false;
+    return;
+  // } else if( viewIndex == 0 ) {
+  //   button.visible = false;
+  } else {
+    button.visible = true;
+    
+  }
+  
+  
+  log('About to switch to ' + viewIndex);
+  log( views[viewIndex]);
+  
+  try{    
+    viewContainer.animate({view: views[viewIndex], transition:Ti.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT} );
+    for( var i = 0; i < views.length; i++ ) {
+      views[i].visible = (i == viewIndex) ? true : false;
+    }
+  } catch( ex ) {
+    log(ex);
   }
   currentView = viewIndex;    
 }
@@ -148,6 +170,7 @@ function loadTree(sha) {
     var tableView = Titanium.UI.createTableView({data:rows});
     
     // var view = newView();
+    
     (newView()).add(tableView);
     
     // switchView(0);
